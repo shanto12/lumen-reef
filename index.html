@@ -1,0 +1,273 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Lumen Reef — A Bioluminescent Ocean Journey</title>
+<meta name="description" content="Dive through five zones of a living, glowing ocean. An animated, colourful, interactive journey from sunlit shallows to the abyss.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><defs><radialGradient id='g'><stop offset='0' stop-color='%23fff'/><stop offset='.4' stop-color='%2300f5d4'/><stop offset='1' stop-color='%237b2ff7'/></radialGradient></defs><circle cx='50' cy='50' r='45' fill='url(%23g)'/></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..800;1,9..144,300..800&family=Outfit:wght@300..700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#04051a;--ink:#eaf6ff;--mute:#9db3d6;--c1:#00f5d4;--c2:#7b2ff7;--c3:#ff2e93;--c4:#ffb703;--c5:#3a86ff;
+--serif:'Fraunces',Georgia,serif;--sans:'Outfit',system-ui,sans-serif}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--ink);font-family:var(--sans);overflow-x:hidden;line-height:1.6}
+#sea{position:fixed;inset:0;z-index:0;pointer-events:none}
+#depthbg{position:fixed;inset:0;z-index:-1;background:linear-gradient(180deg,#0aa5c9 0%,#0b4fa0 25%,#1c1670 55%,#0a0530 80%,#02020c 100%);background-size:100% 500vh;background-position:0 0}
+.glow{position:fixed;width:420px;height:420px;border-radius:50%;pointer-events:none;z-index:1;transform:translate(-50%,-50%);background:radial-gradient(circle,rgba(0,245,212,.22),rgba(123,47,247,.10) 50%,transparent 70%);mix-blend-mode:screen;left:-999px;top:-999px}
+main,header,footer{position:relative;z-index:2}
+nav{position:fixed;top:0;left:0;right:0;z-index:20;display:flex;justify-content:space-between;align-items:center;padding:18px 5vw;backdrop-filter:blur(14px);background:linear-gradient(180deg,rgba(4,5,26,.55),transparent)}
+.logo{font-family:var(--serif);font-weight:700;font-size:1.35rem;letter-spacing:.02em;display:flex;align-items:center;gap:10px;color:#fff;text-decoration:none}
+.logo i{width:22px;height:22px;border-radius:50%;background:radial-gradient(circle at 35% 35%,#fff,var(--c1) 40%,var(--c2));box-shadow:0 0 18px var(--c1);animation:pulse 3s ease-in-out infinite}
+nav ul{display:flex;gap:30px;list-style:none}
+nav a{color:var(--ink);text-decoration:none;font-size:.92rem;opacity:.8;transition:.3s}
+nav ul a:hover{opacity:1;color:var(--c1)}
+.btn{display:inline-block;padding:14px 30px;border-radius:99px;font-weight:600;text-decoration:none;color:#04051a;background:linear-gradient(120deg,var(--c1),var(--c5),var(--c2),var(--c3),var(--c4));background-size:300% 100%;animation:shift 6s linear infinite;box-shadow:0 0 30px rgba(0,245,212,.4);transition:transform .3s,box-shadow .3s;border:0;cursor:pointer;font-size:1rem;font-family:inherit}
+.btn:hover{transform:translateY(-3px) scale(1.04);box-shadow:0 0 50px rgba(255,46,147,.55)}
+.btn.ghost{background:none;color:#fff;border:1.5px solid rgba(255,255,255,.35);box-shadow:none;animation:none}
+.btn.ghost:hover{border-color:var(--c1);color:var(--c1)}
+@keyframes shift{to{background-position:300% 0}}
+@keyframes pulse{50%{transform:scale(1.25);opacity:.8}}
+.hero{min-height:100vh;display:grid;place-items:center;text-align:center;padding:120px 6vw 80px;position:relative}
+.eyebrow{letter-spacing:.35em;text-transform:uppercase;font-size:.78rem;color:var(--c1);margin-bottom:22px}
+h1{font-family:var(--serif);font-weight:800;font-size:clamp(3.2rem,11vw,9.5rem);line-height:.95;letter-spacing:-.03em}
+h1 .line{display:block;overflow:hidden;padding-bottom:.08em}
+h1 .line span{display:inline-block;transform:translateY(110%);animation:rise 1.2s cubic-bezier(.2,.8,.2,1) forwards}
+h1 .line:nth-child(2) span{animation-delay:.18s}
+@keyframes rise{to{transform:none}}
+.grad{background:linear-gradient(100deg,var(--c1),var(--c5),var(--c2),var(--c3),var(--c4),var(--c1));background-size:250% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;animation:shift 8s linear infinite;font-style:italic}
+.hero p.sub{max-width:620px;margin:30px auto 40px;font-size:1.2rem;color:var(--mute);opacity:0;animation:fade 1.2s .7s forwards}
+.hero .cta{display:flex;gap:16px;justify-content:center;flex-wrap:wrap;opacity:0;animation:fade 1.2s .95s forwards}
+@keyframes fade{to{opacity:1}}
+.scrollcue{position:absolute;bottom:30px;left:50%;transform:translateX(-50%);font-size:.75rem;letter-spacing:.3em;color:var(--mute);text-transform:uppercase;display:flex;flex-direction:column;align-items:center;gap:10px}
+.scrollcue b{width:1px;height:46px;background:linear-gradient(var(--c1),transparent);animation:drip 2s infinite}
+@keyframes drip{0%{transform:scaleY(0);transform-origin:top}50%{transform:scaleY(1);transform-origin:top}51%{transform-origin:bottom}100%{transform:scaleY(0);transform-origin:bottom}}
+.marquee{overflow:hidden;border-block:1px solid rgba(255,255,255,.12);padding:22px 0;background:rgba(4,5,26,.35);backdrop-filter:blur(6px)}
+.marquee div{display:flex;gap:60px;width:max-content;animation:scroll 32s linear infinite;font-family:var(--serif);font-size:2.2rem;font-style:italic;white-space:nowrap}
+.marquee span:nth-child(3n+1){color:var(--c1)}.marquee span:nth-child(3n+2){color:var(--c3)}.marquee span:nth-child(3n){color:var(--c4)}
+@keyframes scroll{to{transform:translateX(-50%)}}
+section{padding:130px 6vw;max-width:1280px;margin:auto}
+h2{font-family:var(--serif);font-size:clamp(2.2rem,5.5vw,4.4rem);line-height:1.05;letter-spacing:-.02em;margin-bottom:22px;font-weight:700}
+.lead{max-width:640px;color:var(--mute);font-size:1.15rem}
+.reveal{opacity:0;transform:translateY(50px);transition:opacity 1s,transform 1s cubic-bezier(.2,.8,.2,1)}
+.reveal.in{opacity:1;transform:none}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:24px;margin-top:70px}
+.stat{padding:32px;border-radius:26px;background:linear-gradient(145deg,rgba(255,255,255,.09),rgba(255,255,255,.02));border:1px solid rgba(255,255,255,.14);backdrop-filter:blur(10px)}
+.stat b{font-family:var(--serif);font-size:3.4rem;display:block;line-height:1}
+.stat:nth-child(1) b{color:var(--c1)}.stat:nth-child(2) b{color:var(--c3)}.stat:nth-child(3) b{color:var(--c4)}.stat:nth-child(4) b{color:var(--c5)}
+.stat span{color:var(--mute);font-size:.95rem}
+.zones{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:22px;margin-top:60px}
+.zone{position:relative;border-radius:28px;padding:34px 28px;min-height:360px;display:flex;flex-direction:column;justify-content:flex-end;overflow:hidden;border:1px solid rgba(255,255,255,.16);transition:transform .5s cubic-bezier(.2,.8,.2,1),box-shadow .5s;transform-style:preserve-3d;cursor:default}
+.zone::before{content:"";position:absolute;inset:0;background:var(--g);opacity:.9;transition:.5s}
+.zone::after{content:"";position:absolute;width:220px;height:220px;border-radius:50%;top:-60px;right:-60px;background:radial-gradient(circle,rgba(255,255,255,.55),transparent 65%);filter:blur(6px);animation:float 7s ease-in-out infinite}
+.zone:hover{transform:translateY(-14px) rotate(-1deg);box-shadow:0 30px 70px -10px var(--s)}
+.zone>*{position:relative;z-index:1}
+.zone small{letter-spacing:.25em;text-transform:uppercase;font-size:.7rem;opacity:.85}
+.zone h3{font-family:var(--serif);font-size:2rem;margin:6px 0 8px;line-height:1.05}
+.zone p{font-size:.95rem;opacity:.92}
+.zone .depth{position:absolute;top:24px;left:28px;font-family:var(--serif);font-size:1.1rem;font-weight:600;z-index:1}
+@keyframes float{50%{transform:translate(-30px,40px) scale(1.15)}}
+.creatures{display:grid;grid-template-columns:1.1fr 1fr;gap:60px;align-items:center}
+.stage{position:relative;aspect-ratio:1;border-radius:50%;display:grid;place-items:center}
+.stage::before{content:"";position:absolute;inset:6%;border-radius:50%;background:conic-gradient(from 0deg,var(--c1),var(--c5),var(--c2),var(--c3),var(--c4),var(--c1));filter:blur(50px);opacity:.55;animation:spin 14s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.stage svg{position:relative;width:88%;overflow:visible;filter:drop-shadow(0 0 30px rgba(0,245,212,.6))}
+.bell{animation:bell 3.6s ease-in-out infinite;transform-origin:200px 150px}
+@keyframes bell{50%{transform:scale(1.07,.9)}}
+.tent path{fill:none;stroke-linecap:round;animation:sway 4s ease-in-out infinite;transform-origin:top}
+.tent path:nth-child(even){animation-delay:-1.5s}
+@keyframes sway{50%{transform:skewX(9deg) translateX(6px)}}
+.tabs{display:flex;gap:10px;flex-wrap:wrap;margin:26px 0}
+.tab{padding:10px 22px;border-radius:99px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.2);color:#fff;font-family:inherit;cursor:pointer;transition:.3s;font-size:.95rem}
+.tab.on,.tab:hover{background:var(--tc);border-color:var(--tc);color:#04051a;box-shadow:0 0 24px var(--tc)}
+#cname{font-family:var(--serif);font-size:2.6rem;font-style:italic;margin-bottom:8px;transition:color .5s}
+#cdesc{color:var(--mute);min-height:96px}
+.gallery{display:grid;grid-template-columns:repeat(6,1fr);grid-auto-rows:170px;gap:16px;margin-top:60px}
+.tile{border-radius:24px;position:relative;overflow:hidden;border:1px solid rgba(255,255,255,.14);transition:transform .5s,filter .5s}
+.tile:hover{transform:scale(1.03);filter:saturate(1.4)}
+.tile canvas,.tile svg{position:absolute;inset:0;width:100%;height:100%}
+.tile span{position:absolute;left:18px;bottom:14px;font-family:var(--serif);font-size:1.25rem;z-index:2;text-shadow:0 2px 14px rgba(0,0,0,.6)}
+.t1{grid-column:span 3;grid-row:span 2}.t2{grid-column:span 3}.t3{grid-column:span 2}.t4{grid-column:span 1}.t5{grid-column:span 2}.t6{grid-column:span 4}.t7{grid-column:span 2}
+.pledge{text-align:center;padding:120px 6vw}
+.pledge .box{max-width:900px;margin:auto;padding:70px 5vw;border-radius:44px;background:linear-gradient(145deg,rgba(0,245,212,.14),rgba(123,47,247,.18),rgba(255,46,147,.14));border:1px solid rgba(255,255,255,.2);backdrop-filter:blur(16px);position:relative;overflow:hidden}
+.pledge .box::before{content:"";position:absolute;inset:-50%;background:conic-gradient(from 0deg,transparent,rgba(0,245,212,.25),transparent 30%);animation:spin 9s linear infinite}
+.pledge .box>*{position:relative}
+form{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:34px}
+input{padding:15px 26px;border-radius:99px;border:1.5px solid rgba(255,255,255,.3);background:rgba(4,5,26,.6);color:#fff;font-size:1rem;font-family:inherit;min-width:260px;outline:0;transition:.3s}
+input:focus{border-color:var(--c1);box-shadow:0 0 24px rgba(0,245,212,.4)}
+#thanks{margin-top:20px;color:var(--c1);min-height:1.5em}
+footer{text-align:center;padding:50px 6vw 70px;color:var(--mute);font-size:.9rem}
+footer .logo{justify-content:center;margin-bottom:12px;font-size:1.6rem}
+@media(max-width:860px){nav ul{display:none}.creatures{grid-template-columns:1fr}.gallery{grid-template-columns:repeat(2,1fr)}.tile{grid-column:span 1!important;grid-row:span 1!important}.t1,.t6{grid-column:span 2!important}section{padding:90px 6vw}}
+@media(prefers-reduced-motion:reduce){*{animation-duration:.01s!important;animation-iteration-count:1!important;transition:none!important}}
+</style>
+</head>
+<body>
+<div id="depthbg"></div>
+<canvas id="sea"></canvas>
+<div class="glow" id="glow"></div>
+
+<nav>
+  <a class="logo" href="#top"><i></i>Lumen Reef</a>
+  <ul><li><a href="#zones">Zones</a></li><li><a href="#creatures">Creatures</a></li><li><a href="#gallery">Gallery</a></li><li><a href="#join">Expedition</a></li></ul>
+  <a class="btn" href="#join" style="padding:10px 24px;font-size:.9rem">Dive in</a>
+</nav>
+
+<header class="hero" id="top">
+  <div>
+    <div class="eyebrow">An expedition of light · 0 – 4,000 m</div>
+    <h1><span class="line"><span>Descend into</span></span><span class="line"><span class="grad">living colour</span></span></h1>
+    <p class="sub">Below the sun, the ocean makes its own light. Follow the glow through five zones of drifting jellyfish, electric plankton and creatures that shimmer in every colour you can name.</p>
+    <div class="cta"><a class="btn" href="#zones">Begin the descent</a><a class="btn ghost" href="#creatures">Meet the glow</a></div>
+  </div>
+  <div class="scrollcue">Scroll<b></b></div>
+</header>
+
+<div class="marquee"><div id="mq"></div></div>
+
+<main>
+<section id="intro">
+  <div class="reveal"><div class="eyebrow">The living lantern</div>
+  <h2>Three quarters of deep-sea life<br>glows <span class="grad">on purpose.</span></h2>
+  <p class="lead">Bioluminescence is the ocean's oldest language — used to hunt, to hide, to flirt and to flee. Lumen Reef is a love letter to it: a scroll-powered descent where the water darkens and the colour gets louder.</p></div>
+  <div class="stats">
+    <div class="stat reveal"><b data-n="76">0</b><span>% of deep-sea animals make light</span></div>
+    <div class="stat reveal"><b data-n="4000">0</b><span>metres to the abyssal plain</span></div>
+    <div class="stat reveal"><b data-n="540">0</b><span>million years of glowing evolution</span></div>
+    <div class="stat reveal"><b data-n="5">0</b><span>zones, each with its own palette</span></div>
+  </div>
+</section>
+
+<section id="zones">
+  <div class="reveal"><div class="eyebrow">Five zones</div><h2>Every metre down<br>changes the <span class="grad">colour of the world.</span></h2></div>
+  <div class="zones">
+    <article class="zone reveal" style="--g:linear-gradient(160deg,#00e5ff,#3a86ff 70%);--s:rgba(0,229,255,.5)"><span class="depth">0 – 200 m</span><small>Zone I</small><h3>Sunlit Shallows</h3><p>Coral gardens, turquoise shimmer and dancing light-rays.</p></article>
+    <article class="zone reveal" style="--g:linear-gradient(160deg,#3a86ff,#7b2ff7 75%);--s:rgba(123,47,247,.55)"><span class="depth">200 – 1,000 m</span><small>Zone II</small><h3>Twilight Drift</h3><p>The last blue fades. Jellyfish start to spark like distant cities.</p></article>
+    <article class="zone reveal" style="--g:linear-gradient(160deg,#9d4edd,#ff2e93 80%);--s:rgba(255,46,147,.55)"><span class="depth">1,000 – 2,000 m</span><small>Zone III</small><h3>Midnight Bloom</h3><p>Magenta pulses and ghostly chains of siphonophores.</p></article>
+    <article class="zone reveal" style="--g:linear-gradient(160deg,#ff2e93,#ff7b00 60%,#ffb703);--s:rgba(255,140,0,.55)"><span class="depth">2,000 – 3,500 m</span><small>Zone IV</small><h3>Ember Vents</h3><p>Hydrothermal chimneys glow amber against absolute black.</p></article>
+    <article class="zone reveal" style="--g:linear-gradient(160deg,#0a0530,#00f5d4 130%);--s:rgba(0,245,212,.5)"><span class="depth">3,500 m +</span><small>Zone V</small><h3>The Abyss</h3><p>Silence, pressure — and a single teal star swimming by.</p></article>
+  </div>
+</section>
+
+<section id="creatures">
+  <div class="creatures">
+    <div class="stage reveal">
+      <svg viewBox="0 0 400 480" id="jelly">
+        <defs><radialGradient id="jb" cx="50%" cy="30%" r="75%"><stop offset="0" stop-color="#fff" stop-opacity=".95"/><stop offset=".35" id="j1" stop-color="#00f5d4"/><stop offset="1" id="j2" stop-color="#7b2ff7"/></radialGradient></defs>
+        <g class="tent" id="tent"></g>
+        <g class="bell"><path d="M50 170C50 70 120 25 200 25s150 45 150 145c0 20-20 30-40 20-20 18-40 18-55 2-16 18-40 18-55 0-15 16-40 16-55-2-20 10-45 0-45-20z" fill="url(#jb)" opacity=".92"/><ellipse cx="160" cy="80" rx="55" ry="22" fill="#fff" opacity=".25" transform="rotate(-18 160 80)"/></g>
+      </svg>
+    </div>
+    <div class="reveal">
+      <div class="eyebrow">Meet the glow</div>
+      <div id="cname">Moon Jelly</div>
+      <div class="tabs" id="tabs"></div>
+      <p id="cdesc"></p>
+    </div>
+  </div>
+</section>
+
+<section id="gallery">
+  <div class="reveal"><div class="eyebrow">Generative gallery</div><h2>Painted in <span class="grad">pure light.</span></h2><p class="lead">Every tile below is drawn live in your browser — nothing is a photo. Hover them, they react.</p></div>
+  <div class="gallery">
+    <div class="tile t1 reveal"><canvas data-art="aurora"></canvas><span>Aurora Tide</span></div>
+    <div class="tile t2 reveal"><canvas data-art="plankton"></canvas><span>Plankton Storm</span></div>
+    <div class="tile t3 reveal"><canvas data-art="rings"></canvas><span>Sonar Bloom</span></div>
+    <div class="tile t4 reveal"><canvas data-art="waves"></canvas></div>
+    <div class="tile t5 reveal"><canvas data-art="ember"></canvas><span>Ember Vent</span></div>
+    <div class="tile t6 reveal"><canvas data-art="ribbon"></canvas><span>Ribbon Current</span></div>
+    <div class="tile t7 reveal"><canvas data-art="orbs"></canvas><span>Lantern Fish</span></div>
+  </div>
+</section>
+
+<section class="pledge" id="join">
+  <div class="box reveal">
+    <div class="eyebrow">Next expedition · Spring 2027</div>
+    <h2>Save a seat<br>on the <span class="grad">next descent.</span></h2>
+    <p class="lead" style="margin:auto">Get one glowing dispatch a month and first access to the live-dive screenings. No spam — only light.</p>
+    <form id="f"><input type="email" required placeholder="you@ocean.com" aria-label="Email"><button class="btn" type="submit">Join the crew</button></form>
+    <div id="thanks"></div>
+  </div>
+</section>
+</main>
+
+<footer><a class="logo" href="#top"><i></i>Lumen Reef</a>A fictional expedition · Designed & coded with light, CSS and canvas · 2026</footer>
+
+<script>
+(()=>{
+const $=s=>document.querySelector(s),rm=matchMedia('(prefers-reduced-motion:reduce)').matches;
+// marquee
+const words=['Bioluminescence','Siphonophore','Twilight','Comb Jelly','Plankton','Anglerfish','Abyss','Vampire Squid','Hydrothermal','Ctenophore'];
+$('#mq').innerHTML=[...words,...words].map(w=>`<span>${w}</span>`).join('');
+// reveal
+const io=new IntersectionObserver(e=>e.forEach(x=>{if(x.isIntersecting){x.target.classList.add('in');io.unobserve(x.target);
+ x.target.querySelectorAll('[data-n]').forEach(count);if(x.target.dataset.n)count(x.target)}}),{threshold:.15});
+document.querySelectorAll('.reveal').forEach((el,i)=>{el.style.transitionDelay=(i%5)*70+'ms';io.observe(el)});
+function count(el){const n=+el.dataset.n,t=1600,s=performance.now();(function f(now){const p=Math.min(1,(now-s)/t);el.textContent=Math.round(n*(1-Math.pow(1-p,4))).toLocaleString();if(p<1)requestAnimationFrame(f)})(s)}
+// depth colour by scroll
+const bg=$('#depthbg');
+function sc(){const m=document.documentElement.scrollHeight-innerHeight;bg.style.backgroundPosition=`0 ${(scrollY/m)*100}%`}
+addEventListener('scroll',sc,{passive:true});sc();
+// cursor glow
+const g=$('#glow');let mx=innerWidth/2,my=innerHeight/2;
+addEventListener('pointermove',e=>{mx=e.clientX;my=e.clientY;g.style.left=mx+'px';g.style.top=my+'px'});
+// tilt zone cards
+document.querySelectorAll('.zone').forEach(z=>{z.addEventListener('pointermove',e=>{const r=z.getBoundingClientRect(),x=(e.clientX-r.left)/r.width-.5,y=(e.clientY-r.top)/r.height-.5;z.style.transform=`translateY(-14px) perspective(700px) rotateY(${x*12}deg) rotateX(${-y*12}deg)`});z.addEventListener('pointerleave',()=>z.style.transform='')});
+// background sea canvas: rising plankton + drifting jellies
+const cv=$('#sea'),cx=cv.getContext('2d');let W,H,P=[];
+function rs(){W=cv.width=innerWidth;H=cv.height=innerHeight;P=Array.from({length:Math.min(150,W/9|0)},()=>mk(true))}
+const hues=[170,200,265,325,40];
+function mk(r){return{x:Math.random()*W,y:r?Math.random()*H:H+20,r:Math.random()*2.6+.6,v:Math.random()*.5+.15,h:hues[Math.random()*5|0],p:Math.random()*6,jelly:Math.random()<.05}}
+addEventListener('resize',rs);rs();
+(function loop(t){cx.clearRect(0,0,W,H);
+ const depth=scrollY/Math.max(1,document.documentElement.scrollHeight-innerHeight);
+ cx.globalCompositeOperation='lighter';
+ P.forEach((p,i)=>{p.y-=p.v*(p.jelly?1.2:1);p.x+=Math.sin(t/1400+p.p)*.35+(mx-W/2)*.00008*p.r;
+  const dx=p.x-mx,dy=p.y-my,d=Math.hypot(dx,dy);if(d<140){p.x+=dx/d*(140-d)*.03;p.y+=dy/d*(140-d)*.03}
+  if(p.y<-30)P[i]=mk(false);
+  const a=.35+.35*Math.sin(t/600+p.p)+depth*.3;
+  if(p.jelly){const s=16+p.r*6;const gr=cx.createRadialGradient(p.x,p.y,0,p.x,p.y,s*2.6);gr.addColorStop(0,`hsla(${p.h},100%,75%,.55)`);gr.addColorStop(1,'transparent');cx.fillStyle=gr;cx.beginPath();cx.arc(p.x,p.y,s*2.6,0,7);cx.fill();
+   cx.strokeStyle=`hsla(${p.h},100%,75%,.35)`;cx.lineWidth=1.2;for(let k=-2;k<=2;k++){cx.beginPath();cx.moveTo(p.x+k*s/3,p.y+s/3);cx.quadraticCurveTo(p.x+k*s/3+Math.sin(t/500+k)*8,p.y+s*1.4,p.x+k*s/3+Math.sin(t/400+k)*12,p.y+s*2.2);cx.stroke()}
+   cx.fillStyle=`hsla(${p.h},100%,80%,.55)`;cx.beginPath();cx.ellipse(p.x,p.y,s*.8,s*(.5+.08*Math.sin(t/300)),0,Math.PI,0);cx.fill()}
+  else{const gr=cx.createRadialGradient(p.x,p.y,0,p.x,p.y,p.r*5);gr.addColorStop(0,`hsla(${p.h},100%,70%,${a})`);gr.addColorStop(1,'transparent');cx.fillStyle=gr;cx.beginPath();cx.arc(p.x,p.y,p.r*5,0,7);cx.fill()}
+ });
+ // light rays fade with depth
+ const ra=Math.max(0,.16-depth*.5);if(ra>0){for(let i=0;i<5;i++){const x=W*(.1+i*.22)+Math.sin(t/3000+i)*60;const gr=cx.createLinearGradient(x,0,x+120,H*.8);gr.addColorStop(0,`rgba(180,255,255,${ra})`);gr.addColorStop(1,'transparent');cx.fillStyle=gr;cx.beginPath();cx.moveTo(x-30,0);cx.lineTo(x+50,0);cx.lineTo(x+260,H*.8);cx.lineTo(x+60,H*.8);cx.fill()}}
+ cx.globalCompositeOperation='source-over';
+ if(!rm)requestAnimationFrame(loop)})(0);
+// jellyfish tentacles + creature switcher
+const C=[
+ {n:'Moon Jelly',a:'#00f5d4',b:'#7b2ff7',d:'Drifting on pulse and current, the moon jelly is 95% water — and a living stained-glass window. Its four horseshoe gonads shimmer like a halo.'},
+ {n:'Sea Sapphire',a:'#3a86ff',b:'#00e5ff',d:'A tiny copepod that flashes electric blue-green as light bends through its crystal-thin body. Males vanish and reappear in a rainbow flicker.'},
+ {n:'Crystal Siren',a:'#ff2e93',b:'#ffb703',d:'A magenta-and-gold jelly that unspools 12-metre tentacles of light. Divers call the sight a floating firework, frozen mid-burst.'},
+ {n:'Ghost Lantern',a:'#ffb703',b:'#ff2e93',d:'A warm amber glow in the black — this lantern fish carries a spotlight of photophores to lure prey and confuse anything hunting from below.'},
+ {n:'Abyss Star',a:'#e0ffff',b:'#00f5d4',d:'The deepest resident of the reef. It pulses a single cold teal beacon, once every eleven seconds, for reasons science is still decoding.'}];
+const tent=$('#tent');let tp='';
+for(let i=0;i<9;i++){const x=90+i*27,s=(i%2?1:-1)*(10+i%3*6);tp+=`<path d="M${x} 185 q ${s} 60 0 120 t 0 120 t ${-s/2} 60" stroke="url(#jb)" stroke-width="${5-i%3}" opacity=".85"/>`}
+tent.innerHTML=tp;
+const tabs=$('#tabs');
+C.forEach((c,i)=>{const b=document.createElement('button');b.className='tab';b.textContent=c.n;b.style.setProperty('--tc',c.a);b.onclick=()=>pick(i);tabs.appendChild(b)});
+function pick(i){const c=C[i];$('#cname').textContent=c.n;$('#cname').style.color=c.a;$('#cdesc').textContent=c.d;$('#j1').setAttribute('stop-color',c.a);$('#j2').setAttribute('stop-color',c.b);
+ document.querySelectorAll('.tab').forEach((t,k)=>t.classList.toggle('on',k==i));$('.stage svg').style.filter=`drop-shadow(0 0 34px ${c.a})`}
+pick(0);
+// generative gallery
+const arts={
+ aurora(c,w,h,t){c.fillStyle='#050820';c.fillRect(0,0,w,h);c.globalCompositeOperation='lighter';for(let k=0;k<5;k++){const hu=[160,190,270,320,140][k];c.beginPath();c.moveTo(0,h);for(let x=0;x<=w;x+=8)c.lineTo(x,h*(.35+k*.07)+Math.sin(x/70+t/900+k*1.7)*h*.13+Math.sin(x/33-t/700+k)*h*.04);c.lineTo(w,h);const g=c.createLinearGradient(0,h*.2,0,h);g.addColorStop(0,`hsla(${hu},100%,60%,.55)`);g.addColorStop(1,'transparent');c.fillStyle=g;c.fill()}c.globalCompositeOperation='source-over'},
+ plankton(c,w,h,t,s){c.fillStyle='#04051a';c.fillRect(0,0,w,h);c.globalCompositeOperation='lighter';s.pts=s.pts||Array.from({length:110},()=>({x:Math.random(),y:Math.random(),h:Math.random()*360,v:Math.random()*.3+.1}));s.pts.forEach(p=>{const x=((p.x+Math.sin(t/2000*p.v+p.h)*.05)*w),y=((p.y+t/9000*p.v)%1)*h;const g=c.createRadialGradient(x,y,0,x,y,14);g.addColorStop(0,`hsla(${p.h+t/40},100%,65%,.9)`);g.addColorStop(1,'transparent');c.fillStyle=g;c.fillRect(x-14,y-14,28,28)});c.globalCompositeOperation='source-over'},
+ rings(c,w,h,t){c.fillStyle='#0b0330';c.fillRect(0,0,w,h);for(let i=0;i<9;i++){const r=((t/20+i*22)%200)/200;c.strokeStyle=`hsla(${300-r*140},100%,65%,${1-r})`;c.lineWidth=3;c.beginPath();c.arc(w/2,h/2,r*Math.max(w,h)*.7,0,7);c.stroke()}},
+ waves(c,w,h,t){const g=c.createLinearGradient(0,0,w,h);g.addColorStop(0,'#ffb703');g.addColorStop(1,'#ff2e93');c.fillStyle=g;c.fillRect(0,0,w,h);c.strokeStyle='rgba(255,255,255,.7)';c.lineWidth=2;for(let k=0;k<8;k++){c.beginPath();for(let y=0;y<=h;y+=6)c.lineTo(w/2+Math.sin(y/22+t/500+k)*(10+k*5)+(k-4)*8,y);c.stroke()}},
+ ember(c,w,h,t,s){c.fillStyle='#120206';c.fillRect(0,0,w,h);c.globalCompositeOperation='lighter';s.e=s.e||[];if(s.e.length<90)s.e.push({x:.5+(Math.random()-.5)*.25,y:1,v:Math.random()*.006+.002,l:1,w:Math.random()});s.e.forEach((p,i)=>{p.y-=p.v;p.x+=Math.sin(p.y*12+p.w*9)*.002;p.l=p.y;if(p.y<0)s.e[i]={x:.5+(Math.random()-.5)*.25,y:1,v:Math.random()*.006+.002,w:Math.random()};const g=c.createRadialGradient(p.x*w,p.y*h,0,p.x*w,p.y*h,10);g.addColorStop(0,`hsla(${20+p.y*40},100%,60%,${p.y})`);g.addColorStop(1,'transparent');c.fillStyle=g;c.fillRect(p.x*w-10,p.y*h-10,20,20)});c.globalCompositeOperation='source-over'},
+ ribbon(c,w,h,t){c.fillStyle='#050a2a';c.fillRect(0,0,w,h);c.globalCompositeOperation='lighter';for(let k=0;k<14;k++){c.beginPath();for(let x=0;x<=w;x+=6){const y=h/2+Math.sin(x/90+t/800+k*.35)*h*.28*Math.sin(t/3000+k*.1)+Math.cos(x/40-t/600)*8;x?c.lineTo(x,y+k*3):c.moveTo(x,y)}c.strokeStyle=`hsla(${170+k*13},100%,60%,.55)`;c.lineWidth=2.5;c.stroke()}c.globalCompositeOperation='source-over'},
+ orbs(c,w,h,t){c.fillStyle='#07052a';c.fillRect(0,0,w,h);c.globalCompositeOperation='lighter';for(let k=0;k<7;k++){const x=w/2+Math.cos(t/1200+k*.9)*w*.3,y=h/2+Math.sin(t/900+k*1.3)*h*.3;const g=c.createRadialGradient(x,y,0,x,y,h*.5);g.addColorStop(0,`hsla(${k*50+t/30},100%,60%,.8)`);g.addColorStop(1,'transparent');c.fillStyle=g;c.fillRect(0,0,w,h)}c.globalCompositeOperation='source-over'}};
+const tiles=[...document.querySelectorAll('canvas[data-art]')].map(el=>{const s={vis:false,el,ctx:el.getContext('2d')};new IntersectionObserver(e=>s.vis=e[0].isIntersecting).observe(el);return s});
+function fit(){tiles.forEach(s=>{const r=s.el.getBoundingClientRect(),d=Math.min(devicePixelRatio,1.5);s.el.width=r.width*d;s.el.height=r.height*d;s.ctx.setTransform(d,0,0,d,0,0);s.w=r.width;s.h=r.height})}
+addEventListener('resize',fit);setTimeout(fit,100);addEventListener('load',fit);
+(function gl(t){tiles.forEach(s=>{if(s.vis&&s.w)arts[s.el.dataset.art](s.ctx,s.w,s.h,t,s)});requestAnimationFrame(gl)})(0);
+// form
+$('#f').addEventListener('submit',e=>{e.preventDefault();$('#thanks').textContent='✦ Welcome aboard, crew. Your first dispatch surfaces soon.';e.target.reset()});
+})();
+</script>
+</body>
+</html>
